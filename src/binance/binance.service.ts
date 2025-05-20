@@ -46,7 +46,7 @@ export class BinanceService {
      dateTo: number
  }
   ): Promise<string>{
-    let result = 'No enough data to analyze!';
+    let result = 'Not enough data to analyze!';
     try {
       const symbolDataForPeriod = await this.getTradesByPeriod({ symbol, dateFrom, dateTo });
 
