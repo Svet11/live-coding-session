@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {BadRequestException, Injectable} from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 
@@ -16,11 +16,16 @@ export class BinanceService {
     dateTo: number;
   }) {
     try {
+      if (!symbol) {
+        throw new Error('Symbol is not provided');
+      }
       const url = `${process.env.BINANCE_BASE_URL}/api/v3/aggTrades?symbol=${symbol}&startTime=${dateFrom}&endTime=${dateTo}&limit=10`;
 
+      console.log(await firstValueFrom(this.httpsService.get(url)));
       return firstValueFrom(this.httpsService.get(url));
     } catch (err) {
       console.log(err?.message || err);
+      throw new BadRequestException(err?.message || err);
     }
   }
 }
