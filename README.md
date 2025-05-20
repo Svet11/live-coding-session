@@ -3,6 +3,8 @@ To start app you need to:
 2. install dependencies by running: yarn
 3. start the app by running: yarn start:dev
 
+you can find envs in .env.example file! 
+
 The next steps for developing:
 1. Make error handling for all corner cases (fe limits in analyzing method)
 2. Cover the codebase by tests (was not able to write them in time)
