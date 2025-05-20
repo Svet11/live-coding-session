@@ -14,4 +14,13 @@ export class BinanceController {
   ) {
     return this.binanceService.getTradesByPeriod({ symbol, dateFrom, dateTo, limit });
   }
+
+  @Get('analyze')
+  getAnalyzedDataForSymbolByperiod(
+      @Query('symbol') symbol: string,
+      @Query('dateFrom') dateFrom: number,
+      @Query('dateTo') dateTo: number,
+  ) {
+    return this.binanceService.analyzeSymbolChanges({ symbol, dateFrom, dateTo });
+  }
 }

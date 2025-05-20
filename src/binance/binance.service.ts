@@ -1,7 +1,6 @@
 import {BadRequestException, Injectable} from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-import e from "express";
 
 @Injectable()
 export class BinanceService {
@@ -31,8 +30,44 @@ export class BinanceService {
       const result = await firstValueFrom(this.httpsService.get(url));
       return result.data;
     } catch (err) {
-      console.log(err?.message || err);
+      console.log(err?.message);
       throw new BadRequestException(err?.message || err);
+    }
+  }
+
+  async analyzeSymbolChanges({
+     symbol,
+     dateFrom,
+     dateTo
+  }:
+ {
+     symbol: string;
+     dateFrom: number;
+     dateTo: number
+ }
+  ): Promise<string>{
+    let result = 'No enough data to analyze!';
+    try {
+      const symbolDataForPeriod = await this.getTradesByPeriod({ symbol, dateFrom, dateTo });
+
+      if (symbolDataForPeriod.length < 2) return result;
+
+      const { p: symbolStartingPrice } = symbolDataForPeriod.pop();
+      const { p: symbolLastPrice } = symbolDataForPeriod.shift();
+
+      const isGrowing = symbolLastPrice > symbolStartingPrice;
+      const differencePoints = Math.abs(symbolLastPrice - symbolStartingPrice);
+
+      if (isGrowing) {
+        return `Symbol increased by ${differencePoints} points`;
+      } else if (symbolLastPrice === symbolStartingPrice) {
+        return `Symbol did not changed for this period`;
+      }
+
+      return `Symbol dencreased by ${differencePoints} points`;
+    } catch (err) {
+      console.log(err?.message)
+      return result;
     }
   }
 }
