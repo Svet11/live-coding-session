@@ -8,9 +8,10 @@ export class BinanceController {
   @Get()
   getTradesByPeriod(
     @Query('symbol') symbol: string,
-    @Query('dateFrom') dateFrom: number,
-    @Query('dateTo') dateTo: number,
+    @Query('dateFrom') dateFrom?: number,
+    @Query('dateTo') dateTo?: number,
+    @Query('limit') limit?: number,
   ) {
-    return this.binanceService.getTradesByPeriod({ symbol, dateFrom, dateTo });
+    return this.binanceService.getTradesByPeriod({ symbol, dateFrom, dateTo, limit });
   }
 }
